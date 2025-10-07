@@ -1,0 +1,48 @@
+# version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: listing_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: task_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend1:
+    build: ./listing-service-backend
+    container_name: nest_backend1
+    environment:
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: yourpassword
+      DATABASE_NAME: task_db
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./listing-service-frontend
+      dockerfile: Dockerfile
+    container_name: react_frontend
+    volumes:
+      - ./listing-service-frontend/build:/usr/share/nginx/html
+    command: sh -c "echo 'Frontend built'"
+
+  frontend_server:
+    image: frontend
+    build: ./frontend
+    ports:
+      - 5000:5000
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8080
+    container_name: frontend
+    
+volumes:
+  postgres_data:
