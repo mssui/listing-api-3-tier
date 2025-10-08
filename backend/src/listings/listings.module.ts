@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { ListingsController } from './listings.controller';
 import { ListingsService } from './listings.service';
 import { ListingsRepository } from './listings.repository';
-//import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { CreateListing } from '../dto/entity/create-listing.entity';
+import { Listing } from './listing.model';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  // imports: [TypeOrmModule.forFeature([CreateListing])],
+  imports: [SequelizeModule.forFeature([Listing])],
   controllers: [ListingsController],
   providers: [ListingsService, ListingsRepository ],
+  exports: [ListingsRepository],
 })
 export class ListingsModule { }
