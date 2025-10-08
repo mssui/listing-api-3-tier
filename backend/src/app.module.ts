@@ -1,7 +1,9 @@
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Module } from '@nestjs/common';
-import { Listing } from '../listings/listing.model.js';
+import { Listing } from './listings/listing.model';
 import { ListingsModule } from './listings/listings.module.js';
+import { ListingsRepository } from './listings/listings.repository.js';
+import { ListingsService } from './listings/listings.service.js';
 
 
 @Module({
@@ -21,7 +23,10 @@ import { ListingsModule } from './listings/listings.module.js';
        }),
     }),
     ListingsModule,
+    SequelizeModule.forFeature([Listing]),
   ],
+  providers: [ListingsRepository, ListingsService],
+  exports: [ListingsRepository],
 })
 
 export class AppModule {}

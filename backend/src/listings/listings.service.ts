@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CreateListingDto } from '../dto/create-listing.dto';
 //import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Sequelize } from "sequelize-typescript";
 
 import { ListingsRepository } from './listings.repository';
 
@@ -9,8 +10,8 @@ import { ListingsRepository } from './listings.repository';
 export class ListingsService {
   constructor(
     @Inject(ListingsRepository) private readonly listingRepository: Repository<ListingsRepository>,
+    private sequelize: Sequelize,
   ) { }
-  //private readonly cats: CreateListingDto[] = [];
 
   create(newList: CreateListingDto) {
     console.log('Create hits', newList)
@@ -20,7 +21,10 @@ export class ListingsService {
     newListing.onHold = false;
 
 
-   // this.listingRepository.save(newListing as any);
+   this.listingRepository.save(newListing as any);
+   
+
+
   }
 
   // findAll(): CreateListingDto[] {
