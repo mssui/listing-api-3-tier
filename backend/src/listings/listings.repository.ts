@@ -1,5 +1,7 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateListingDto } from '../dto/create-listing.dto';
+import { DeleteListingDto } from '../dto/delete-listing.dto';
+import { UpdateListingDto } from '../dto/update-listing.dto';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { Listing } from './listing.model';
@@ -22,8 +24,23 @@ export class ListingsRepository {
         }
     }
 
-    // findAll(): CreateListingDto[] {
-    //   console.log('find all hits', this.cats)
-    //   return this.cats;
-    // }
+    async updateListing(newList): Promise<any> {
+        console.log('TO BE UPDATED:', newList);
+        const newRecordData = new Listing(newList);
+        try {
+            newRecordData.save();
+        } catch (err) {
+            throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async deleteListingById(listingId): Promise<any> {
+        console.log('ID TO DELETE:', listingId);
+        // const newRecordData = new Listing(newList);
+        // try {
+        //     newRecordData.save();
+        // } catch (err) {
+        //     throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
+    }
 }
