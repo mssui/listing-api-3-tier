@@ -1,22 +1,40 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, AllowNull } from 'sequelize-typescript';
 import { DataTypes } from '@sequelize/core';
 
-
 @Table({ paranoid: true })
-export class Listing extends Model {
+export class Listing extends Model<Listing> {
+    @Column(DataType.STRING)
+    declare name: string;
 
-  @Column({ defaultValue: true })
-  active: boolean;
+    @Column(DataType.INTEGER)
+    declare price: number;
 
-  @Column({ defaultValue: false })
-  onHold: boolean;
+    @Column(DataType.STRING)
+    declare currency: string;
 
-  @Column
-  createdBy: string;
+    @Column(DataType.BOOLEAN)
+    declare active: boolean;
 
-  @Column
-  updatedBy: string;
+    @Column(DataType.BOOLEAN)
+    declare onHold: boolean;
 
-  @Column
-  deletedBy: string;
+    @Column(DataType.STRING)
+    declare createdBy?: string | null;
+
+    @Column(DataType.STRING)
+    declare updatedBy?: string | null;
+
+    @Column(DataType.STRING)
+    declare deletedBy?: string | null;
+
+    // @Column(DataType.STRING)
+    // createdAt: string;
+
+    // @Column(DataType.STRING)
+    // updatedAt: string;
+
+    // @Column(DataType.STRING)
+    // deletedAt: string;
 }
+
+

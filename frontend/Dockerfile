@@ -16,7 +16,8 @@ RUN npm run build
 #COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start:dev"]
+#CMD ["nginx", "-g", "daemon off;"]
 
 # # Stage 1: Build React app
 # FROM node:18-alpine AS builder
@@ -28,3 +29,5 @@ CMD ["nginx", "-g", "daemon off;"]
 
 # # Stage 2: Copy build to Nginx (handled by main Nginx proxy)
 # FROM alpine:3.17 as dummy
+
+

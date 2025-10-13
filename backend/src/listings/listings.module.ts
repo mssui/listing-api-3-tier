@@ -6,9 +6,9 @@ import { Listing } from './listing.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Listing])],
-  controllers: [ListingsController],
-  providers: [ListingsService, ListingsRepository ],
-  exports: [ListingsRepository],
+    imports: [SequelizeModule.forFeature([Listing])],
+    controllers: [ListingsController],
+    providers: [ListingsService, ListingsRepository],
+    exports: [ListingsRepository],
 })
-export class ListingsModule { }
+export class ListingsModule {}
