@@ -15,8 +15,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend1:
-    build: ./listing-service-backend
-    container_name: nest_backend1
+    build: ./backend
+    container_name: nest_backend
     environment:
       DATABASE_HOST: localhost
       DATABASE_PORT: 5432
@@ -28,21 +28,11 @@ services:
 
   frontend:
     build:
-      context: ./listing-service-frontend
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: react_frontend
-    volumes:
-      - ./listing-service-frontend/build:/usr/share/nginx/html
     command: sh -c "echo 'Frontend built'"
 
-  frontend_server:
-    image: frontend
-    build: ./frontend
-    ports:
-      - 5000:5000
-    environment:
-      - REACT_APP_BACKEND_URL=http://localhost:8080
-    container_name: frontend
     
 volumes:
   postgres_data:

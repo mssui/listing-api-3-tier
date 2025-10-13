@@ -1,34 +1,25 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateListingDto } from '../dto/create-listing.dto';
-//import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize } from 'sequelize-typescript';
 
 import { ListingsRepository } from './listings.repository';
 
 @Injectable()
 export class ListingsService {
-  constructor(
-    @Inject(ListingsRepository) private readonly listingRepository: Repository<ListingsRepository>,
-    private sequelize: Sequelize,
-  ) { }
+    constructor(private readonly listingRepository: ListingsRepository) {}
 
-  create(newList: CreateListingDto) {
-    console.log('Create hits', newList)
-    const newListing: CreateListingDto = new CreateListingDto();
+    async create(newList: CreateListingDto): Promise<any> {
+        console.log('Create hits', newList);
+        // const newListing: CreateListingDto = new CreateListingDto(...newList);
 
-    console.log('Create generates', newListing)
-    newListing.onHold = false;
+        // console.log('Create generates', newListing)
+        // newListing.onHold = false;
 
+        return this.listingRepository.createListing(newList);
+    }
 
-   this.listingRepository.save(newListing as any);
-   
-
-
-  }
-
-  // findAll(): CreateListingDto[] {
-  //   console.log('find all hits', this.cats)
-  //   return this.cats;
-  // }
+    // findAll(): CreateListingDto[] {
+    //   console.log('find all hits', this.cats)
+    //   return this.cats;
+    // }
 }

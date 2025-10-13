@@ -3,21 +3,21 @@
     "username": "postgres",
     "password": "yourpassword",
     "database": "task_db",
-    "host": "backend1",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "yourpassword",
     "database": "database_test",
-    "host": "backend1",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "yourpassword",
     "database": "database_production",
-    "host": "backend1",
+    "host": "localhost",
     "dialect": "postgres"
   }
 }
