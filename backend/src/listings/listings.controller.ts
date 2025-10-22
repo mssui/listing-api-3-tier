@@ -16,7 +16,7 @@ import {
 export class ListingsController {
     constructor(private listingsService: ListingsService) { }
 
-   // @ApiOperation()
+    // @ApiOperation()
     @Post('create')
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     async create(@Body() createCatDto: CreateListingDto): Promise<any> {
@@ -35,10 +35,9 @@ export class ListingsController {
         return this.listingsService.delete(listingId);
     }
 
-
-
-    // @Get()
-    // async findAll(): Promise<CreateListingDto[]> {
-    //   return this.listingsService.findAll();
-    // }
+    @Get()
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
+    async getAll(): Promise<CreateListingDto[]> {
+        return this.listingsService.findAll();
+    }
 }

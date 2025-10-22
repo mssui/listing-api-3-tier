@@ -43,4 +43,14 @@ export class ListingsRepository {
         //     throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
         // }
     }
+
+    async findAll(): Promise<any> {
+        try {
+            const result = this.listingModel.findAll();
+            console.log('result', result)
+            return result;
+        } catch (err) {
+            throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
