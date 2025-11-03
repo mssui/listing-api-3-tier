@@ -19,7 +19,8 @@ export class ListingsController {
     // @ApiOperation()
     @Post('create')
     @ApiResponse({ status: 403, description: 'Forbidden.' })
-    async create(@Body() createCatDto: CreateListingDto): Promise<any> {
+    async create(@Body() createCatDto: CreateListingDto): Promise<CreateListingDto> {
+        console.log('Create Body:',createCatDto)
         return this.listingsService.create(createCatDto);
     }
 

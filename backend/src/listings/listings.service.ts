@@ -11,7 +11,7 @@ export class ListingsService {
     constructor(private readonly listingRepository: ListingsRepository) { }
 
     async create(newList: CreateListingDto): Promise<any> {
-        console.log('Create hits', newList);
+        //console.log('Create hits', newList);
         // const newListing: CreateListingDto = new CreateListingDto(...newList);
 
         // console.log('Create generates', newListing)
@@ -21,7 +21,7 @@ export class ListingsService {
     }
 
     async update(newList: UpdateListingDto): Promise<any> {
-        console.log('Create hits', newList);
+       // console.log('Create hits', newList);
         // const newListing: CreateListingDto = new CreateListingDto(...newList);
 
         // console.log('Create generates', newListing)

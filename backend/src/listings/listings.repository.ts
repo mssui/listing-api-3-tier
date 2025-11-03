@@ -19,6 +19,7 @@ export class ListingsRepository {
         const newRecordData = new Listing(newList);
         try {
             newRecordData.save();
+            return newRecordData;
         } catch (err) {
             throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
         }
