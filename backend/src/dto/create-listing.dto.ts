@@ -7,11 +7,22 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BaseListing {
+    @ApiProperty({ example: "admin", description: 'createdBy can be null or pass the user ID' })
     createdBy: string | null;
+
+    @ApiProperty({ example: "admin", description: 'updatedBy can be null or pass the user ID' })
     updatedBy: string | null;
+
+    @ApiProperty({ example: "admin", description: 'deletedBy can be null or pass the user ID' })
     deletedBy: string | null;
+
+    @ApiProperty({ example: "2025-10-22 10:32:18.921 +00:00", description: 'Creation time or null' })
     createdAt?: string | null;
+
+    @ApiProperty({ example: null, description: 'Updation time or null' })
     updatedAt?: string | null;
+
+    @ApiProperty({ example: null, description: 'Deletion time or null' })
     deletedAt?: string | null;
 }
 

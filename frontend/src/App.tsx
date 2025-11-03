@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { CreateListingDto } from "./types/listing.types";
+import { Listings } from "./components/Listings";
 
 const apiBase = 'http://localhost:3001';
 
-type Tab = 'create' | 'update' | 'delete';
+type Tab = 'all' | 'create' | 'update' | 'delete';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('create');
@@ -11,14 +13,16 @@ export default function App() {
     <div style={{ maxWidth: 720, margin: '40px auto', fontFamily: 'system-ui, Arial' }}>
       <h1>Listing Service UI</h1>
       <nav style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-        <button onClick={() => setTab('create')} disabled={tab==='create'}>Create</button>
-        <button onClick={() => setTab('update')} disabled={tab==='update'}>Update</button>
-        <button onClick={() => setTab('delete')} disabled={tab==='delete'}>Delete</button>
+        <button onClick={() => setTab('all')} disabled={tab === 'all'}>All Listings</button>
+        <button onClick={() => setTab('create')} disabled={tab === 'create'}>Create</button>
+        <button onClick={() => setTab('update')} disabled={tab === 'update'}>Update</button>
+        <button onClick={() => setTab('delete')} disabled={tab === 'delete'}>Delete</button>
       </nav>
+      {tab === 'all' && <ShowAllTab />}
       {tab === 'create' && <CreateTab />}
       {tab === 'update' && <UpdateTab />}
       {tab === 'delete' && <DeleteTab />}
-      <p style={{marginTop: 32, fontSize: 12, opacity: 0.7}}>Backend: {apiBase}</p>
+      <p style={{ marginTop: 32, fontSize: 12, opacity: 0.7 }}>Backend: {apiBase}</p>
     </div>
   )
 }
@@ -32,8 +36,42 @@ function CreateTab() {
     setCreating(true); setError(null); setNewId(null);
     try {
       console.log('About to hit create. Res: ')
-      const res = await fetch(`${apiBase}/listings`, { method: 'POST' });
-      
+      // body: JSON.stringify({
+      //       "first_name": this.state.firstName
+      //  })
+      //  method: 'post',
+      //  headers: {'Content-Type':'application/json'},
+      //  body: JSON.stringify({
+      //       "first_name": this.state.firstName
+      //  })
+
+      const fakeData = {
+        createdBy: "admin",
+        updatedBy: "admin",
+        deletedBy: "admin",
+        createdAt: "2025-10-22 10:32:18.921 +00:00",
+        updatedAt: null,
+        deletedAt: null,
+        name: "Old Magazines from 1962 West Coast Published",
+        price: 38,
+        currency: "$",
+        active: false,
+        onHold: true
+      }
+
+      const testDataStringfied = JSON.stringify({
+        fakeData
+      })
+
+      console.log('Stringified Data:', testDataStringfied)
+      const res = await fetch(`${apiBase}/listings/create`, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...fakeData
+        })
+      });
+
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setNewId(data.id);
@@ -51,7 +89,7 @@ function CreateTab() {
         {creating ? 'Creating...' : 'Create'}
       </button>
       {newId && <p>New Listing ID: <code>{newId}</code></p>}
-      {error && <p style={{color: 'red'}}>Error: {error}</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
     </div>
   )
 }
@@ -98,22 +136,22 @@ function UpdateTab() {
   return (
     <div>
       <h2>Update Listing</h2>
-      <div style={{display:'grid', gap: 8, maxWidth: 480}}>
+      <div style={{ display: 'grid', gap: 8, maxWidth: 480 }}>
         <label>
           Unique ID (required)
-          <input value={id} onChange={e=>setId(e.target.value)} placeholder="UUID" />
+          <input value={id} onChange={e => setId(e.target.value)} placeholder="UUID" />
         </label>
         <label>
           active (optional, true/false)
-          <input value={active} onChange={e=>setActive(e.target.value)} placeholder="true or false" />
+          <input value={active} onChange={e => setActive(e.target.value)} placeholder="true or false" />
         </label>
         <label>
           onHold (optional, true/false)
-          <input value={onHold} onChange={e=>setOnHold(e.target.value)} placeholder="true or false" />
+          <input value={onHold} onChange={e => setOnHold(e.target.value)} placeholder="true or false" />
         </label>
         <button onClick={submit}>Update</button>
       </div>
-      {result && <pre style={{background:'#f3f3f3', padding:8, marginTop:8}}>{result}</pre>}
+      {result && <pre style={{ background: '#f3f3f3', padding: 8, marginTop: 8 }}>{result}</pre>}
     </div>
   )
 }
@@ -140,12 +178,49 @@ function DeleteTab() {
       <h2>Delete Listing</h2>
       <label>
         Unique ID
-        <input value={id} onChange={e=>setId(e.target.value)} placeholder="UUID" />
+        <input value={id} onChange={e => setId(e.target.value)} placeholder="UUID" />
       </label>
       <div>
         <button onClick={remove}>Delete</button>
       </div>
-      {result && <pre style={{background:'#f3f3f3', padding:8, marginTop:8}}>{result}</pre>}
+      {result && <pre style={{ background: '#f3f3f3', padding: 8, marginTop: 8 }}>{result}</pre>}
+    </div>
+  )
+}
+
+function ShowAllTab() {
+  const [result, setResult] = useState<Array<CreateListingDto | Error>>([]);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    list().then((res) => {
+      console.log("RESPONSE:", res);
+
+    }
+    )
+  }, []);
+
+  async function list() {
+    try {
+      const res = await fetch(`${apiBase}/listings/`, { method: 'GET' });
+      const dataText = res.json();
+      if (!res.ok) throw new Error('Request failed');
+      setResult(await dataText);
+    } catch (e: any) {
+      setError(`Error: ${e.message}`);
+    }
+  }
+
+  return (
+    <div>
+      <h2>All Listings</h2>
+      {/* {result && result.map(item as any => {
+        <pre style={{ background: '#f3f3f3', padding: 8, marginTop: 8 }}>{item}</pre>
+      })} */}
+
+      {error && error}
+      {result && result.map((item, i) => <Listings key={i} props={item} />)}
+      {/* {result && <pre style={{ background: '#f3f3f3', padding: 8, marginTop: 8 }}>{result}</pre>} */}
     </div>
   )
 }
